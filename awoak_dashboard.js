@@ -78,46 +78,7 @@ async function generateGraphs() {
 
     // ON READY FUNCTION
     $w.onReady(function () {
-        console.log("PAGE READY");
-        //SENDING DATA TO THE GRAPHS
-        /*if (alignAVG.length < 1) {
-            $w('#textHappinessFactor').text = '0';
-        } else {
-            $w('#textHappinessFactor').text = String(alignAVG[0]);
-        }
-        if (alignResults.length > 0 && realityImpSessions.length > 0 && realityTimeSessions.length > 0) {
-            $w('#dashAlignWheel').postMessage(alignResults[0]);
-            $w("#dashAlignOverTime").postMessage([alignAVG, alignDates]);
-            $w('#dashRealityCheck').postMessage([realityImpSessions[0], realityTimeSessions[0]]);
-            const res = [];
-            res.push(
-                realityImpSessions.map(e => {
-                    return e[0]
-                }));
-            res.push(realityTimeSessions.map(e => {
-                return e[0]
-            }));
-            $w('#dashRealOverTime').postMessage([res, alignDates]);
-
-            $w('#btnPrintReport').onClick(e => {
-                wixLocation.to('https://www.awoaklife.com/report-test');
-            });
-        } else {
-            console.log('No tests taken');
-            $w('#btnPrintReport').onClick(e => {
-                $w('#textNoTestTaken').show('fade', {
-                    "duration": 600,
-                    "delay": 0
-                });
-                setTimeout(() => {
-                    $w('#textNoTestTaken').hide('fade', {
-                        "duration": 600,
-                        "delay": 0
-                    });
-                }, 2500);
-            })
-        }*/
-
+        console.log("PAGE READY");   
         //CREATING DROP-DOWNS
         const dateOptions = [];
         alignDates.forEach((e, i) => {
@@ -159,6 +120,7 @@ async function generateGraphs() {
             });
         }
     });
+    //SENDING DATA TO THE GRAPHS
     if (alignAVG.length < 1) {
             $w('#textHappinessFactor').text = '0';
         } else {
