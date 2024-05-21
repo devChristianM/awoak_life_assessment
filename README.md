@@ -1,5 +1,4 @@
 # awoak_life_assessment
-awoak life project repo
 
   This is the logic of a 3 parts project I developed for mr Bastian Gugger, a life and relationships coach who wanted to step up the functionalities of his website by implementing a series of tests to funnel Google ads visitors and introduce them to the type of services he offers.
 
