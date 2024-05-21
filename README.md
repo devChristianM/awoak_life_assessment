@@ -5,6 +5,7 @@ awoak life project repo
 
   AWOAK TESTS
     This is the first part of the project, it's composed of 3 tests where the user is asked to interact with various inputs to gather data to be used in the "alignment assessment"
+    
       - test1: the user is asked to evaluate from 1 to 10 various aspects of his life such as job, relationships, free time and such through a series of sliders.
       - test2: the user is asked to sort a list of the same aspects of his life as in test1 by order of importance. One the left there is a table with a block for each life aspect and by clicking on them you remove them from the table on the left to the one on the right where they are ordered in accordance with the user inputs.
       - test3: the user is asked to write down 5 things that work in their life and 5 things that don't work in their life with simple input fields.
