@@ -1,0 +1,1614 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Awoak Report</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
+        integrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
+        integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Josefin Sans' rel='stylesheet'>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Josefin Sans', Courier, monospace;
+        }
+
+        img {
+            width: auto;
+            height: auto;
+            margin: 10vh 0;
+        }
+
+        h1 {
+            font-size: 32px;
+            margin: 50px 0 32px 0;
+            color: #8B0000;
+            text-align: center;
+        }
+
+
+        a {
+            font-size: 16px;
+            margin: 30px 0;
+            color: #020018;
+        }
+
+        p {
+            font-size: 18px;
+            margin: 30px 0;
+            color: #020018;
+        }
+
+
+
+        #sticky-header {
+            position: -webkit-sticky;
+            position: sticky;
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            top: 0;
+            height: 70px;
+            width: 100%;
+            background-color: antiquewhite;
+            text-align: center;
+            z-index: 5;
+        }
+
+        .dropbtn {
+            background-color: #8B0000;
+            color: white;
+            padding: 16px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            min-width: 150px;
+            max-height: 70px;
+        }
+
+        .dropbtn:hover,
+        .dropbtn:focus,
+        #dwnloadBTN:hover,
+        #dwnloadBTN:focus {
+            background-color: #aa0000;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f1f1f1;
+            min-width: 150px;
+            overflow: auto;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: #020018;
+            padding: 12px 16px;
+            margin: 0;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown a:hover {
+            background-color: #ddd;
+        }
+
+        .show {
+            display: block;
+        }
+
+
+        #nav-dates {
+            padding: 10px;
+            min-width: 15vw;
+            max-height: 70px;
+            font-size: 16px;
+        }
+
+        #dwnloadBTN {
+            padding: 16px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            min-width: 150px;
+            max-height: 70px;
+            color: white;
+            background-color: #8B0000;
+            border: none;
+        }
+
+        .spinner {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            background-color: white;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            border: 5px solid black;
+            display: none;
+        }
+
+        .active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .full-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            /*padding: 0;*/
+            padding: 0 5vw;
+            margin: auto;
+        }
+
+        .awoak-bg {
+            height: 700px;
+            width: 60%;
+            min-width: 300px;
+            background-size: cover;
+            background-position: 50% 50%;
+        }
+
+        .bgcanvas {
+            display: none;
+        }
+
+        .hidden-align {
+            width: 1200px;
+            height: 900px;
+        }
+
+        .hidden-real {
+            width: 1200px;
+            height: 900px;
+        }
+
+        .awoak-logo {
+            width: 350px;
+        }
+
+        .logocanvas {
+            display: none;
+        }
+
+        .awoak-logo2 {
+            width: 30%;
+
+        }
+
+        #user-name,
+        #session-date {
+            font-size: 18px;
+        }
+
+        #page1 {
+            min-height: 95vh;
+        }
+
+        #page2 {
+            align-items: baseline;
+            padding-left: 10vw;
+        }
+
+        #page-index div {
+            display: block;
+            padding: 10px;
+        }
+
+        .align-container {
+            width: 800px;
+            max-width: 100%;
+            height: 650px;
+            position: relative;
+            margin: auto;
+        }
+
+        .align-print {
+            min-width: 1200px;
+            min-height: 900px;
+        }
+
+        .real-container {
+            width: 800px;
+            max-width: 100%;
+            height: 650px;
+            position: relative;
+            margin: auto;
+        }
+
+        .real-print {
+            min-width: 1200px;
+            min-height: 900px;
+        }
+
+        .rect {
+            border: 1px solid rgba(139, 0, 0, 0.8);
+            width: 80%;
+            margin: auto;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .rect p {
+            max-width: 90%;
+        }
+
+        .div-container {
+            width: 80%;
+            min-height: 250px;
+        }
+
+        .divided {
+            display: inline-block;
+            width: 50%;
+            min-height: 250px;
+        }
+
+        .divided p,
+        .divided ul {
+            padding: 10px 10px;
+            margin-left: 15px;
+        }
+
+        .divided li {
+            margin: 15px 0;
+        }
+
+        .divided p {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .d1 {
+            border-right: 2px solid rgba(139, 0, 0, 1);
+            float: left;
+        }
+
+        .d2 {
+            float: right;
+        }
+
+        .long8 {
+            align-self: center;
+        }
+
+        .work-container {
+            display: flex;
+            justify-content: left;
+            width: 90%;
+            height: 30px;
+            margin: 20px;
+        }
+
+        .works {
+            width: 100px;
+            height: 40px;
+        }
+
+        .small-rect {
+            border: 1px solid rgba(139, 0, 0, 0.7);
+            width: 100%;
+            max-width: 400px;
+            height: 35px;
+            margin: 0 20px;
+        }
+
+        .work-rect {
+            border: 1px solid rgba(139, 0, 0, 0.7);
+            width: 95%;
+            min-height: 200px;
+            margin-top: 15px;
+            margin-bottom: 30px;
+        }
+
+        .community-bg {
+            width: 100%
+        }
+
+        .BG2 {
+            width: 1700px;
+        }
+
+        #page13 {
+            display: flex;
+        }
+
+        .long-13 {
+            padding: 2rem;
+        }
+
+        .long13-2 {
+            text-align: center;
+        }
+
+        .flex-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bastian-full {
+            max-height: 600px;
+            align-content: center;
+        }
+
+        .lds-ring {
+            display: inline-block;
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
+
+        .lds-ring div {
+            box-sizing: border-box;
+            display: block;
+            position: absolute;
+            width: 64px;
+            height: 64px;
+            margin: 8px;
+            border: 8px solid rgba(139, 0, 0, 1);
+            border-radius: 50%;
+            animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+            border-color: rgba(139, 0, 0, 1) transparent transparent transparent;
+        }
+
+        .lds-ring div:nth-child(1) {
+            animation-delay: -0.45s;
+        }
+
+        .lds-ring div:nth-child(2) {
+            animation-delay: -0.3s;
+        }
+
+        .lds-ring div:nth-child(3) {
+            animation-delay: -0.15s;
+        }
+
+        @keyframes lds-ring {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media screen and (max-width: 750px) {
+            #sticky-header {
+                height: 50px;
+            }
+
+            .dropbtn {
+                width: 15%;
+                min-width: 70px;
+                padding: 12px;
+            }
+
+            #nav-dates {
+                width: 20%;
+                min-width: 150px;
+            }
+
+            #dwnloadBTN {
+                min-width: 80px;
+                padding: 12px;
+            }
+
+            .flex-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .align-container {
+                height: 300px;
+            }
+
+            .real-container {
+                height: 400px;
+            }
+
+            .div-container {
+                width: 100%;
+            }
+
+            .awoak-bg {
+                height: 400px;
+                align-self: center;
+            }
+
+            .awoak-logo {
+                width: 65%;
+            }
+
+            .bastian-full {
+                width: 100%;
+                align-self: center;
+            }
+
+            #page13 {
+                align-items: baseline;
+            }
+
+            .long-13 {
+                padding: 0;
+            }
+
+            .long13-2 {
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="sticky-header">
+        <div class="dropdown">
+            <button onclick="myFunction()" class="dropbtn">Go to</button>
+            <div id="myDropdown" class="dropdown-content">
+                <a id="a1" href="#page3">Introduction</a>
+                <a id="a2" href="#page4">Your Alignment Wheel</a>
+                <a id="a3" href="#page5">A Reality Check</a>
+                <a id="a4" href="#page6">Reflective Questions</a>
+                <a id="a5" href="#page7">The Stories We Tell Ourselves</a>
+                <a id="a6" href="#page10">Reflective Questions</a>
+                <a id="a7" href="#page11">Evolve Or Repeat</a>
+                <a id="a8" href="#page13">About</a>
+            </div>
+        </div>
+        <select name="nav-dates" id="nav-dates" onchange="updatePage(this)">
+
+        </select>
+        <button id="dwnloadBTN">PDF</button>
+    </div>
+    <div class="spinner">
+        <div class="lds-ring">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <h1>Loading . . .</h1>
+    </div>
+    <div id="page1" class="full-page">
+        <div class="awoak-bg"></div>
+        <h1>ALIGNMENT ASSESSMENT</h1>
+        <p id="user-name" style="margin: 10px 0"></p>
+        <p id="session-date" style="margin: 10px 0"></p>
+        <canvas id="bg-canvas" class="bgcanvas" width="1080" height="1350"></canvas>
+        <canvas id="logo-to-print" class="logocanvas" width="500" height="285"></canvas>
+    </div>
+
+    <div id="page3" class="full-page">
+        <h1>INTRODUCTION</h1>
+        <p class="long-text long3">You are doing it! You are investing in yourself and the fact that you are here
+            reading this means that you are creating more awareness for your life and for
+            who you are. <br><br>
+            Awareness is at the base of navigating life and a key element when it comes
+            to creating. <br><br>
+            The truth is this, without awareness we would just keep repeating the same old
+            patterns and behaviours which then lead to the same exact results. So, another
+            word for awareness is consciousness.<br><br>
+            To build up that muscle means to see through all the illusions and unconscious
+            behaviours that run our everyday life. It means to have a choice if we want to
+            evolve or to repeat.<br><br>
+            Now, sometimes acting unconscious can be very helpful if we repeat a healthy
+            habit. It is not so helpful though when we act out past trauma or operate on
+            old and outdated beliefs that are limiting our reality.
+            I’m proud of you for having already invested some time and going through the
+            exercises.<br><br>
+            It is my intention to shine even more light on these exercises and to give you a
+            taste of what it means to coach yourself.
+            Have fun expanding your consciousness. <br><br>
+            Much love, <br>
+            Bastian</p>
+
+        <img class="awoak-logo" src="https://static.wixstatic.com/media/eb57b1_3ce9b74d0e44400299962a17d47fa676~mv2.png"
+            crossorigin="anonymous" alt="">
+    </div>
+    <div id="page4" class="full-page" style="padding: 0;">
+        <h1 id="p4-title" style="padding: 0 5vw">YOUR ALIGNMENT WHEEL</h1>
+        <p class="long-text long4" style="padding: 0 5vw">The Alignment Wheel is a great tool to assess how balanced you
+            are in your life.
+            In a quick and visual way, you can see your most important areas of your life,
+            how happy you are in each one of them and where you can improve. Your
+            happiness factor gives you an overall average throughout all categories. <br><br> The
+            Wheel of Life is a great tool to check in with yourself from time to time and
+            see how the values are changing, if you need to adjust, or if what you are
+            doing is working. Remember, you have access through my website to this tool
+            and you can come back anytime, take a new measurement, and see the
+            changes over time</p>
+        <div class="align-container"><canvas id="alignChart"></canvas></div>
+        <div class="hidden-align"><canvas class="hidAlignChart"></canvas></div>
+        <p style="padding: 0 5vw; text-align: center;">Your Current Happines Factor (out of 10)</p>
+        <span class="happiness"></span>
+
+        <img class="awoak-logo" src="https://static.wixstatic.com/media/eb57b1_3ce9b74d0e44400299962a17d47fa676~mv2.png"
+            crossorigin="anonymous" alt="">
+    </div>
+    <div id="page5" class="full-page" style="padding: 0;">
+        <h1 id="p5-title" style="padding: 0 5vw">A REALITY CHECK</h1>
+        <p class="long-text long5" style="padding: 0 5vw">The Reality Check is a short but very powerful Exercise that
+            shows us what's
+            most important to us in comparison to where our Energy and Focus actually
+            goes. For most people what's most important and where their energy goes are
+            not aligned at all. <br><br> We often know but there is power in seeing it on paper.
+            Awareness is key when it comes to improving ourselves and that means
+            honesty and seeing the reality as it is today. If the order or importance, and
+            where your time goes are aligned, you are doing a great job! Keep going! If
+            not, it’s a good moment to reflect on it.
+        </p>
+        <div class="real-container"><canvas id="realChart"></canvas></div>
+        <div class="hidden-real"><canvas class="hidRealChart"></canvas></div>
+        <img class="awoak-logo" src="https://static.wixstatic.com/media/eb57b1_3ce9b74d0e44400299962a17d47fa676~mv2.png"
+            crossorigin="anonymous" alt="">
+    </div>
+    <div id="page6" class="full-page">
+        <h1 id="p5-title">REFLECTIVE QUESTIONS</h1>
+        <p class="long-text long6">
+            Seeing the Reality Check graph, how does this make you feel? <br>
+            Why do you think there is a difference?</p>
+        <div class="rect">
+            <p>Print the Report and write down your thoughts in this section</p>
+        </div>
+        <img class="awoak-logo" src="https://static.wixstatic.com/media/eb57b1_3ce9b74d0e44400299962a17d47fa676~mv2.png"
+            crossorigin="anonymous" alt="">
+    </div>
+    <div id="page7" class="full-page">
+        <h1>THE STORIES WE TELL OURSELVES</h1>
+        <p class="long-text long7-1">One of the most important aspects in personal development is "seeing" the
+            stories we tell ourselves. This is crucial because it's the meaning we give to any
+            circumstance. Every event that happens in our lives is neutral until we give it a
+            meaning. The default thinking/meaning we go to, then defines how we feel and
+            the actions that we take as a result. If we change the story, we change the
+            result. The default thoughts and beliefs are "programs" that run our life. They
+            either support our vision or the sabotage it.
+        </p>
+        <div class="div-container">
+            <div class="divided d1">
+                <p style="margin:0; color: rgba(139, 0, 0, 0.8)">What Works in my Life</p>
+                <ul id="work-list">
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                </ul>
+            </div>
+            <div class="divided d2">
+                <p style="margin:0; color: rgba(139, 0, 0, 0.8)">What doesn't Work in my Life</p>
+                <ul id="dont-work-list">
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                </ul>
+            </div>
+        </div>
+        <p class="long-text long7-2">These are the things you chose to write down regarding when asked to make a
+            list of what is working in your life and what isn’t right now. Let’s take it one
+            step further now. <br><br>
+            Please pick two, one from each side, of the things you’ve written down above
+            and continue the next page.
+        </p>
+        <img class="awoak-logo" src="https://static.wixstatic.com/media/eb57b1_3ce9b74d0e44400299962a17d47fa676~mv2.png"
+            crossorigin="anonymous" alt="">
+    </div>
+    <div id="page8" class="full-page">
+        <p class="long-text long8">Note the two elements down in the boxes below and then take a minute and
+            write down everything you believe to be true about that thing. What are the
+            stories alive? Why is it working? Why isn’t it? How do you feel about it?</p>
+        <div class="work-container" style="align-self:baseline;">
+            <div class="works" style="font-size: 18px; padding-top: 3px;">Working: </div>
+            <div class="small-rect"></div>
+        </div>
+        <p style="margin:15px; align-self:baseline;">Beliefs</p>
+        <div class="work-rect"></div>
+        <div class="work-container" style="align-self:baseline;">
+            <div class="works">NOT Working: </div>
+            <div class="small-rect"></div>
+        </div>
+        <p style="margin:15px; align-self:baseline;">Beliefs</p>
+        <div class="work-rect"></div>
+        <img class="awoak-logo" src="https://static.wixstatic.com/media/eb57b1_3ce9b74d0e44400299962a17d47fa676~mv2.png"
+            crossorigin="anonymous" style="align-self: center;" alt="">
+    </div>
+    <div id="page9" class="full-page">
+        <p class="long-text long9">You’ve taken some time now and started paying attention to that voice in your
+            head that comments on everything. As mentioned before the way we talk to
+            ourselves has a tremendous impact on what happens next and the way we
+            (re)act and behave. At the end it boils down to this: <br><br>
+            The things that you like in your life, that come with ease, are there because you
+            have "programs" and stories that support their manifestation.
+            Everything that requires "hard work" or feels like a struggle is because the
+            "programs" and stories you have do not support, or even sabotage the
+            manifestation. <br><br>
+            Let that sink in for a second. Whatever you believe is true. Whatever you
+            believe becomes a self-fulfilling prophecy. So then, it is on us to start paying
+            attention to those stories and see where they come from and if they are still
+            serving us or not. That is The Art Of Self Coaching. <br><br>
+            When you look at the Alignment Wheel in the beginning and compare it to
+            this exercise you will find that the beliefs and stories you have running are
+            reflected in the Alignment Wheel too. High numbers equal supporting stories
+            and low numbers show you that there is some work to do. The best way to
+            start that work is by doing the exercise we just did and just write down what is
+            going on inside of you.</p>
+        <img class="awoak-logo" src="https://static.wixstatic.com/media/eb57b1_3ce9b74d0e44400299962a17d47fa676~mv2.png"
+            crossorigin="anonymous" alt="">
+    </div>
+    <div id="page10" class="full-page">
+        <h1>REFLECTIVE QUESTIONS</h1>
+        <p class="long-text long10">Can you identify some more of the stories, beliefs, and thoughts you have, that
+            are NOT supportive? <br><br>
+            Can you identify some of the stories, beliefs, and thoughts you have, that are
+            supportive?</p>
+        <div class="rect">
+            <p>Print the Report and write down your thoughts in this section</p>
+        </div>
+        <img class="awoak-logo" src="https://static.wixstatic.com/media/eb57b1_3ce9b74d0e44400299962a17d47fa676~mv2.png"
+            crossorigin="anonymous" alt="">
+    </div>
+    <div id="page11" class="full-page">
+        <h1>EVOLVE OR REPEAT</h1>
+        <p class="long-text long11">You have done some incredible work already and I’m excited for you to be on
+            this journey. I trust that you expanded your consciousness and the
+            understanding of yourself today. Now I’m curious, what is the category you’d
+            like to improve most right now, knowing what you learned today? What would
+            it mean to you to change it and what would become available for you? <br><br>
+            Let’s find out together and dive deep into your current life situation, where
+            you'd like to go and what challenges you might face. Together we formulate a
+            gameplan and you get to experience what it feels like to work with a powerful
+            coach. <br><br>
+            As a reward for doing all this work I even chip in a 10% discount when
+            applying for one of my Alignment & Clarity Calls. <br><br>
+            Use: Evolve22
+        </p>
+        <a href="https://www.awoaklife.com/booking-calendar/alignment-clarity-call" target="_blank"
+            style="font-size: 16px;">> > > APPLY HERE NOW</a>
+        <img class="awoak-logo2"
+            src="https://static.wixstatic.com/media/eb57b1_a7b81aee165a4c59a1d742644728daf0~mv2.png"
+            crossorigin="anonymous" alt="">
+    </div>
+    <div id="page12" class="full-page">
+        <img class="community-bg" crossorigin="anonymous"
+            src="https://static.wixstatic.com/media/eb57b1_e6e25acc9be0471abd0c6bc8b910b808~mv2.png" alt="">
+        <p class="long-text long12">I was talking about awareness several times already and you probably got by
+            now how crucial it is in order to improve or change. When we build up our
+            awareness muscle, we create a choice: <br><br>
+            To evolve or to repeat.<br><br>
+            Evolving means to make a better decision and step in before we go on and
+            repeat our unconscious patterns. Now that is easier said then done but it’s
+            worth it. This work with ourselves is what creates a life we dream of. It’s so
+            powerful because if we can see through the illusions, we can see a different
+            reality. If we bust an old belief that was holding us back, we can completely
+            change the way we show up in the world. This work is the most powerful work
+            you can do.<br><br>
+            “The most powerful project you will ever work on is YOU”<br><br>
+            If you’d like to go deeper into how this all works, I suggest you watch my free
+            Masterclass. You can do that right here:</p>
+        <a href="https://www.awoaklife.com/evolveorrepeat" target="_blank" style="font-size: 14px;">> > >EVOLVE OR
+            REPEAT MASTERCLASS</a>
+        <img class="awoak-logo" src="https://static.wixstatic.com/media/eb57b1_3ce9b74d0e44400299962a17d47fa676~mv2.png"
+            crossorigin="anonymous" alt="">
+    </div>
+    <div id="page13" class="full-page">
+        <div class="flex-container">
+            <div>
+                <img class="bastian-full" crossorigin="anonymous"
+                    src="https://static.wixstatic.com/media/eb57b1_2ff8810b06c44bdc8520b7988d56b0d9~mv2.jpg" alt="">
+            </div>
+            <div class="long-13">
+                <p class="long-text long13-11">Hi, I'm Bastian, certified life & selfawareness coach (mv.), and I
+                    teach curious souls the empowering
+                    art of self-coaching!<br><br>
+                <p class="long-text long13-111">After a life defining moment back
+                    in 2018, I became conscious of my
+                    inside world. I had just gone
+                    through a breakup; my business
+                    went south, and I lost a big
+                    amount of money. All in the same
+                    30 minutes. <br><br></p>
+                </p>
+                <p class="long-text long13-12">I remember sitting on the floor,
+                    bawling my eyes out, devastated
+                    and in huge emotional pain.<br><br></p>
+                <p class="long-text long13-13">It was that very moment though,
+                    where the big questions came back
+                    and started swirling through my
+                    mind:</p>
+            </div>
+        </div>
+        <div class="long132">
+            <p class="long-text long13-2">Who am I? What am I even doing here?<br><br>
+                What is the purpose of all this anyway?<br><br>
+                How the heck did I end up here?<br><br>
+            </p>
+        </div>
+        <div>
+            <p class="long-text long13-3">I intuitively followed question after question and went on to write over 100
+                pages in the following 7 days, coaching myself and showing myself the
+                answers, I so desperately needed.<br><br><br>
+                Ever since that moment I have been obsessed with this work and soon after
+                decided to help others to empower their lives through <a href="https://www.awoaklife.com/evolveorrepeat"
+                    target="_blank">the art of self-coaching</a></p>
+        </div>
+
+        <div class="img13">
+            <img class="awoak-logo"
+                src="https://static.wixstatic.com/media/eb57b1_3ce9b74d0e44400299962a17d47fa676~mv2.png"
+                crossorigin="anonymous" style="align-self: center;" alt="">
+        </div>
+    </div>
+    <script>
+        let alignResults = [];
+        let alignAVG = [];
+        let alignDates = [];
+        let realityImpSessions = [];
+        let realityTimeSessions = [];
+        let workSessions = [];
+        let dontWorkSessions = [];
+        let userName = '';
+        const spinner = document.querySelector('.spinner');
+        const dwnloadBTN = document.getElementById('dwnloadBTN');
+
+        const bgImg = new Image();
+        bgImg.crossOrigin = "anonymous";
+        bgImg.src = "https://static.wixstatic.com/media/eb57b1_46326326f5d54360b4b58d19e745d0d3~mv2.png";
+        document.querySelector('.awoak-bg').style.backgroundImage = "url('https://static.wixstatic.com/media/eb57b1_46326326f5d54360b4b58d19e745d0d3~mv2.png')"
+        document.querySelector('.awoak-bg').style.backgroundSize = 'contain';
+        document.querySelector('.awoak-bg').style.backgroundRepeat = 'no-repeat';
+        const bgCanvas = document.getElementById('bg-canvas');
+        const bgCtx = bgCanvas.getContext('2d');
+
+        const logoImg = new Image();
+        logoImg.crossOrigin = "anonymous";
+        logoImg.src = "https://static.wixstatic.com/media/eb57b1_3ce9b74d0e44400299962a17d47fa676~mv2.png";
+        document.querySelector('.awoak-bg').style.backgroundImage = bgImg;
+        const logoCanvas = document.getElementById('logo-to-print');
+        const logoCtx = logoCanvas.getContext('2d');
+
+        /* When the user clicks on the page-links button, 
+        toggle between hiding and showing the dropdown content */
+        function myFunction() {
+            document.getElementById("myDropdown").classList.toggle("show");
+        }
+
+        // Close the dropdown if the user clicks outside of it
+        window.onclick = function (event) {
+            if (!event.target.matches('.dropbtn')) {
+                let dropdowns = document.getElementsByClassName("dropdown-content");
+                let i;
+                for (i = 0; i < dropdowns.length; i++) {
+                    let openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        };
+
+        function printDocument() {
+            const pdf = new jsPDF({
+                orientation: 'p',
+                unit: 'in',
+                format: 'a4'
+            });
+            pdf.setProperties({
+                title: 'Alignment Assessment Report',
+                author: 'Bastian Gugger',
+                creator: 'Christian M.'
+            });
+            //Functioning code
+            pdf.setDrawColor(139, 0, 0);
+            pdf.setFont('helvetica');
+            pdf.setFontType('normal');
+            //PAGE 1
+            pdf.addImage(bgCanvas, 'JPEG', 0.5, 0, 7.25, 9);
+            pdf.setTextColor(139, 0, 0);
+            pdf.setFontSize(26);
+            let titleWidth1 = pdf.getTextWidth("ALIGNMENT ASSESSMENT");
+            pdf.text("ALIGNMENT ASSESSMENT", 4.1 - (titleWidth1 / 2), 9);
+            pdf.setTextColor(2, 0, 24);
+            pdf.setFontSize(16);
+            const userName = document.getElementById('user-name').innerText;
+            let selectedDate = document.getElementById('session-date').innerText;
+            let nameX = pdf.getTextWidth(userName);
+            let dateX = pdf.getTextWidth(selectedDate);
+            pdf.text(userName, 4.12 - (nameX / 2), 9.5);
+            pdf.text(selectedDate, 4.12 - (dateX / 2), 10);
+            //PAGE 2
+            pdf.addPage();
+            // Getting the content index lines
+            const anchors = [];
+            const pageLinkNum = [3, 4, 5, 6, 7, 10, 11, 13];
+            const logo = logoCanvas;// .awoak-logo
+            let vOffset = 1.5;
+            for (let i = 1; i < 9; i++) {
+                anchors.push(document.getElementById(`a${i}`).innerText);
+            };
+            pdf.setTextColor(139, 0, 0);
+            pdf.setFontSize(24);
+            pdf.text("CONTENTS", 1, 1);
+            pdf.setTextColor(2, 0, 24);
+            pdf.setFontSize(14);
+            anchors.forEach((e, i) => {
+                if (pageLinkNum[i] === 6 || pageLinkNum[i] === 10) {
+                    pdf.text(e, 1.4, vOffset);
+                } else {
+                    pdf.text(e, 1, vOffset);
+                }
+                pdf.text(String(pageLinkNum[i]), 7, vOffset);
+                pdf.link(1, vOffset - 14 / 72, 7.25, 14 / 72, { pageNumber: pageLinkNum[i] });
+                vOffset += 28 / 72;
+            });
+            //This likn is here as an anchor to a non-existing page, otherwise the rest of the page becomes a link for some reason...
+            pdf.link(1, vOffset - 14 / 72, 7.25, 14 / 72, { pageNumber: 20 });
+            pdf.addImage(logo, 'JPEG', 3, 10.3, 2.5, 1.5);
+            //PAGE 3
+            pdf.addPage();
+            pdf.setTextColor(139, 0, 0);
+            pdf.setFontSize(24);
+            pdf.text("INTRODUCTION", 1, 1);
+            pdf.setTextColor(2, 0, 24);
+            pdf.setFontSize(13);
+            const longT3 = pdf.splitTextToSize((document.querySelector('.long3')).innerText, 6.25);
+            pdf.text(longT3, 1, 1.5);
+            pdf.addImage(logo, 'JPEG', 3, 10.3, 2.5, 1.5);
+            //PAGE 4 ALIGNMENT WHEEL
+            pdf.addPage();
+            pdf.setTextColor(139, 0, 0);
+            pdf.setFontSize(24);
+            pdf.text("YOUR ALIGNMENT WHEEL", 1, 1);
+            pdf.setTextColor(2, 0, 24);
+            pdf.setFontSize(13);
+            const longT4 = pdf.splitTextToSize((document.querySelector('.long4')).innerText, 6.25);
+            pdf.text(longT4, 1, 1.5);
+            // Adding chart to pdf
+            pdf.addImage(document.querySelector('.hidAlignChart'), 'JPEG', 0.35, 3.5, 7, 7 * (3 / 4));
+            pdf.text("Your current Happiness Factor (out of 10)", 2.5, 9.5);
+            pdf.text((document.querySelector('.happiness')).innerText, 4, 10);
+            pdf.addImage(logo, 'JPEG', 3, 10.3, 2.5, 1.5);
+            //PAGE 5 REALITY CHECK
+            pdf.addPage();
+            pdf.setTextColor(139, 0, 0);
+            pdf.setFontSize(24);
+            pdf.text("A REALITY CHECK", 1, 1);
+            pdf.setTextColor(2, 0, 24);
+            pdf.setFontSize(13);
+            const longT5 = pdf.splitTextToSize((document.querySelector('.long5')).innerText, 6.25);
+            pdf.text(longT5, 1, 1.5);
+            pdf.addImage(document.querySelector('.hidRealChart'), 'JPEG', 0.75, 4.5, 6.5, 6.5 * (3 / 4));
+            pdf.addImage(logo, 'JPEG', 3, 10.3, 2.5, 1.5);
+            //PAGE 6
+            pdf.addPage();
+            pdf.setDrawColor(139, 0, 0);
+            pdf.setTextColor(139, 0, 0);
+            pdf.setFontSize(24);
+            pdf.text("REFLECTIVE QUESTIONS", 1, 1);
+            pdf.setTextColor(2, 0, 24);
+            pdf.setFontSize(13);
+            const longT6 = pdf.splitTextToSize((document.querySelector('.long6')).innerText, 6.25);
+            pdf.text(longT6, 1, 1.5);
+            pdf.setLineWidth(1 / 72);
+            pdf.line(1, 2.5, 7.25, 2.5);
+            pdf.line(7.25, 2.5, 7.25, 10);
+            pdf.line(7.25, 10, 1, 10);
+            pdf.line(1, 10, 1, 2.5);
+            pdf.addImage(logo, 'JPEG', 3, 10.3, 2.5, 1.5);
+            //PAGE 7
+            pdf.addPage();
+            let wOffset = 4.7;
+            let dWOffset = 4.7;
+            pdf.setDrawColor(139, 0, 0);
+            pdf.setTextColor(139, 0, 0);
+            pdf.setFontSize(24);
+            pdf.text("THE STORIES WE TELL OURSELVES", 1, 1);
+            pdf.setTextColor(2, 0, 24);
+            pdf.setFontSize(13);
+            const longT71 = pdf.splitTextToSize((document.querySelector('.long7-1')).innerText, 6.25);
+            pdf.text(longT71, 1, 1.5);
+            const workList = document.querySelectorAll('#work-list li');
+            const dontWorkList = document.querySelectorAll('#dont-work-list li');
+            // setting the "work list"
+            pdf.setTextColor(139, 0, 0);
+            pdf.setFontSize(14);
+            pdf.text("What works in my Life", 1, wOffset);
+            pdf.setTextColor(2, 0, 24);
+            pdf.setFontSize(13);
+            wOffset += 30 / 72;
+            workList.forEach(e => {
+                let temp = pdf.splitTextToSize(`- ${e.innerText}`, 3);
+                pdf.text(temp, 1, wOffset);
+                wOffset += 26 / 72 * temp.length;
+            });
+            // setting the "don't work list"
+            pdf.setTextColor(139, 0, 0);
+            pdf.setFontSize(14);
+            pdf.text("What doesn't work in my Life", 4.25, dWOffset);
+            pdf.setTextColor(2, 0, 24);
+            pdf.setFontSize(13);
+            dWOffset += 30 / 72;
+            dontWorkList.forEach(e => {
+                let temp = pdf.splitTextToSize(`- ${e.innerText}`, 3);
+                pdf.text(temp, 4.25, dWOffset);
+                dWOffset += 26 / 72 * temp.length;
+            });
+            //setting mid-line
+            pdf.setLineWidth(1 / 72);
+            pdf.line(4.125, 4.4, 4.125, (wOffset > dWOffset ? wOffset /*- 0.5*/ : dWOffset /*- 0.5*/));
+            const longT72 = pdf.splitTextToSize((document.querySelector('.long7-2')).innerText, 6.25);
+            pdf.text(longT72, 1, 9);
+            pdf.addImage(logo, 'JPEG', 3, 10.3, 2.5, 1.5);
+            //PAGE 8
+            pdf.addPage();
+            pdf.setDrawColor(139, 0, 0);
+            pdf.setTextColor(2, 0, 24);
+            pdf.setFontSize(13);
+            const longT8 = pdf.splitTextToSize((document.querySelector('.long8')).innerText, 6.25);
+            pdf.text(longT8, 1, 1);
+            //first set
+            pdf.text("Working: ", 1, 2.3);
+            pdf.setLineWidth(1 / 72);
+            pdf.rect(2, 2, 4, 0.5);
+            pdf.text("Beliefs", 1, 2.8);
+            pdf.rect(1, 3, 6.25, 3);
+            //second set
+            pdf.text("NOT", 1, 6.7);
+            pdf.text("Working: ", 1, (6.7 + 13 / 72));
+            pdf.setLineWidth(1 / 72);
+            pdf.rect(2, 6.5, 4, 0.5);
+            pdf.text("Beliefs", 1, 7.3);
+            pdf.addImage(logo, 'JPEG', 3, 10.3, 2.5, 1.5);
+            pdf.rect(1, 7.5, 6.25, 3);
+            //PAGE 9
+            pdf.addPage();
+            pdf.setFontSize(13);
+            const longT9 = pdf.splitTextToSize((document.querySelector('.long9')).innerText, 6.25);
+            pdf.text(longT9, 1, 1);
+            pdf.addImage(logo, 'JPEG', 3, 10.3, 2.5, 1.5);
+            //PAGE 10
+            pdf.addPage();
+            pdf.setDrawColor(139, 0, 0);
+            pdf.setTextColor(139, 0, 0);
+            pdf.setFontSize(24);
+            pdf.text("REFLECTIVE QUESTIONS", 1, 1);
+            pdf.setTextColor(2, 0, 24);
+            pdf.setFontSize(13);
+            const longT10 = pdf.splitTextToSize((document.querySelector('.long10')).innerText, 6.25);
+            pdf.text(longT10, 1, 1.5);
+            pdf.setLineWidth(1 / 72);
+            pdf.addImage(logo, 'JPEG', 3, 10.3, 2.5, 1.5);
+            pdf.rect(1, 2.5, 6.25, 8);
+            //PAGE 11
+            pdf.addPage();
+            pdf.setTextColor(139, 0, 0);
+            pdf.setFontSize(24);
+            pdf.text("EVOLVE OR REPEAT", 1, 1);
+            pdf.setTextColor(2, 0, 24);
+            pdf.setFontSize(13);
+            const longT11 = pdf.splitTextToSize((document.querySelector('.long11')).innerText, 6.25);
+            pdf.text(longT11, 1, 1.5);
+            pdf.setFontSize(18);
+            let linkWidth1 = pdf.getTextWidth("> > > APPLY HERE NOW < < <");
+            pdf.textWithLink("> > > APPLY HERE NOW < < <", 4.1 - (linkWidth1 / 2), 6, { url: "https://www.awoaklife.com/booking-calendar/alignment-clarity-call" });
+            pdf.link(3, 5.5, 8, 8, { url: "https://www.awoaklife.com/booking-calendar/alignment-clarity-call" });
+            pdf.setLineWidth(1 / 72);
+            pdf.line(4.1 - (linkWidth1 / 2), 6.05, 4.1 - (linkWidth1 / 2) + linkWidth1 + 0.1, 6.05);
+            pdf.addImage(logo, 'JPEG', 3, 10.3, 2.5, 1.5);
+            //PAGE 12
+            pdf.addPage();
+            pdf.addImage(document.querySelector('.community-bg'), 'JPEG', 0, 0, 8.26, 4.5);
+            pdf.setTextColor(2, 0, 24);
+            pdf.setFontSize(13);
+            const longT12 = pdf.splitTextToSize((document.querySelector('.long12')).innerText, 6.25);
+            pdf.text(longT11, 1, 5);
+            pdf.setFontSize(18);
+            let linkWidth2 = pdf.getTextWidth("> > > EVOLVE OR REPEAT MASTERCLASS < < <");
+            pdf.textWithLink(" > > > EVOLVE OR REPEAT MASTERCLASS < < < ", 4.1 - (linkWidth2 / 2), 9.5, { url: "https://www.awoaklife.com/evolveorrepeat" });
+            pdf.link(2.5, 9, 8, 8, { url: "https://www.awoaklife.com/evolveorrepeat" });
+            pdf.setLineWidth(1 / 72);
+            pdf.line(4.1 - (linkWidth2 / 2), 9.55, 4.1 - (linkWidth2 / 2) + linkWidth2 + 0.1, 9.55);
+            pdf.addImage(logo, 'JPEG', 3, 10.3, 2.5, 1.5);
+            //PAGE 13
+            pdf.addPage();
+            pdf.setTextColor(139, 0, 0);
+            pdf.setFontSize(24);
+            pdf.text("ABOUT", 1, 1);
+            pdf.addImage(document.querySelector('.bastian-full'), 'JPEG', 1, 1.5, 3.3, 5);
+            pdf.setTextColor(2, 0, 24);
+            pdf.setFontSize(12);
+            const longT1311 = pdf.splitTextToSize((document.querySelector('.long13-11')).innerText, 2.8);
+            pdf.text(longT1311, 4.5, 1.6);
+            const longT13111 = pdf.splitTextToSize((document.querySelector('.long13-111')).innerText, 2.8);
+            pdf.text(longT13111, 4.5, 2.8);
+            const longT1312 = pdf.splitTextToSize((document.querySelector('.long13-12')).innerText, 2.8);
+            pdf.text(longT1312, 4.5, 4.5);
+            const longT1313 = pdf.splitTextToSize((document.querySelector('.long13-13')).innerText, 2.8);
+            pdf.text(longT1313, 4.5, 5.8);
+            // under the img
+            const longT132 = pdf.splitTextToSize((document.querySelector('.long13-2')).innerText, 6.25);
+            pdf.text(longT132, 1, 7);
+            const longT133 = pdf.splitTextToSize((document.querySelector('.long13-3')).innerText, 6.25);
+            pdf.text(longT133, 1, 8.5);
+            pdf.link(1.5, 9.5, 8, 10, { url: "https://www.awoaklife.com/evolveorrepeat" });
+            //This likn is here as an anchor to a non-existing page, otherwise the rest of the page becomes a link for some reason...
+            pdf.link(1.5, 10, 8, 10, { pageNumber: 20 });
+            let linkWidth3 = pdf.getTextWidth("the art of self coaching");
+            pdf.setLineWidth(1 / 72);
+            pdf.line(4.3, 9.67, 4.4 + linkWidth3, 9.67);
+            pdf.addImage(logo, 'JPEG', 3, 10.3, 2.5, 1.5);
+            console.log('pdf ready');
+            // Opening the pdf in a new Tab
+            //window.open(URL.createObjectURL(pdf.output("blob", "report.pdf")));
+            //SAVE DOCUMENT when you click the download Button
+            //pdf.save('report.pdf');
+            return pdf.output("blob", "report.pdf");
+        };
+        // GRAPHS SETUP
+        const plugin = {
+            id: 'customCanvasBackgroundColor',
+            beforeDraw: (chart, args, options) => {
+                const { ctx } = chart;
+                ctx.save();
+                ctx.globalCompositeOperation = 'destination-over';
+                ctx.fillStyle = options.color || '#ffffff';
+                ctx.fillRect(0, 0, chart.width, chart.height);
+                ctx.restore();
+            }
+        };
+        // change the colors in "datasets" and options to affect the graphs
+        // ALIGNMENT GRAPH
+        const alignData = {
+            labels: [
+                'My Health & Fitness',
+                'My Intellectual Life',
+                'My Emotional Life',
+                'My Character',
+                'My Spiritual Life',
+                'My Love Relationship',
+                'My Social Life',
+                'My Career',
+                'My Financial Life',
+                'Relationship W. Myself',
+                'Relationship W. Others',
+                'Excitement & Adventure'
+            ],
+            datasets: [{
+                label: '',
+                data: [6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6],
+                fill: true,
+                backgroundColor: 'rgba(116, 38, 44, 0.2)',
+                borderColor: 'rgb(156, 99, 104)',
+                pointBackgroundColor: 'rgb(156, 99, 104)',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: 'rgb(156, 99, 104)'
+            }]
+        };
+
+        const alignConfig = {
+            type: 'radar',
+            data: alignData,
+            options: {
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        min: 0,
+                        max: 10,
+                        beginAtZero: true,
+                        ticks: {
+                            font: {
+                                size: 14
+                            }
+                        },
+                        pointLabels: {
+                            font: {
+                                size: 16
+                            },
+                            color: '#020018'
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.2)'
+                        },
+                        angleLines: {
+                            color: 'rgba(0, 0, 0, 0.2)'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false,
+                    },
+                    customCanvasBackgroundColor: {
+                        color: 'white',
+                    }
+                },
+                elements: {
+                    line: {
+                        borderWidth: 3
+                    }
+                },
+                onResize: (myChart, size) => {
+                    if (size.width < 501) {
+                        alignData.labels = [
+                            'Health & Fitness',
+                            'Intellectual Life',
+                            'Emotional Life',
+                            'Character',
+                            'Spiritual Life',
+                            'Love Rel.',
+                            'Social Life',
+                            'Career',
+                            'Financial Life',
+                            'Rel. W. Myself',
+                            'Rel. W. Others',
+                            'Excitment & Adventure'
+                        ];
+                    } else {
+                        alignData.labels = [
+                            'My Health & Fitness',
+                            'My Intellectual Life',
+                            'My Emotional Life',
+                            'My Character',
+                            'My Spiritual Life',
+                            'My Love Relationship',
+                            'My Social Life',
+                            'My Career',
+                            'My Financial Life',
+                            'Relationship W. Myself',
+                            'Relationship W. Others',
+                            'Excitement & Adventure'
+                        ];
+                    }
+                    if (myChart.width > 1000) {
+                        myChart.options.scales.r.pointLabels.font.size = 28;
+                        myChart.options.scales.r.ticks.font.size = 22;
+                    } else if (myChart.width < 350) {
+                        myChart.options.scales.r.pointLabels.font.size = 11;
+                        myChart.options.scales.r.ticks.font.size = 11;
+                    } else {
+                        myChart.options.scales.r.pointLabels.font.size = 16;
+                        myChart.options.scales.r.ticks.font.size = 14;
+                    }
+                    myChart.update();
+                }
+            },
+            plugins: [plugin]
+        };
+
+        const alignChart = new Chart(
+            document.getElementById('alignChart'),
+            alignConfig
+        );
+        // Setting up hidden Align Graph
+        const hidAlignData = {
+            labels: [
+                'My Health & Fitness',
+                'My Intellectual Life',
+                'My Emotional Life',
+                'My Character',
+                'My Spiritual Life',
+                'My Love Relationship',
+                'My Social Life',
+                'My Career',
+                'My Financial Life',
+                'Relationship W. Myself',
+                'Relationship W. Others',
+                'Excitement & Adventure'
+            ],
+            datasets: [{
+                label: '',
+                data: [6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6],
+                fill: true,
+                backgroundColor: 'rgba(116, 38, 44, 0.2)',
+                borderColor: 'rgb(156, 99, 104)',
+                pointBackgroundColor: 'rgb(156, 99, 104)',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: 'rgb(156, 99, 104)'
+            }]
+        };
+
+        const hidAlignConfig = {
+            type: 'radar',
+            data: hidAlignData,
+            options: {
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        min: 0,
+                        max: 10,
+                        beginAtZero: true,
+                        ticks: {
+                            font: {
+                                size: 22
+                            }
+                        },
+                        pointLabels: {
+                            font: {
+                                size: 28
+                            },
+                            color: '#020018'
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.2)'
+                        },
+                        angleLines: {
+                            color: 'rgba(0, 0, 0, 0.2)'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false,
+                    },
+                    customCanvasBackgroundColor: {
+                        color: 'white',
+                    }
+                },
+                elements: {
+                    line: {
+                        borderWidth: 3
+                    }
+                }
+            },
+            plugins: [plugin]
+        };
+        const hiddenAlignChart = new Chart(
+            document.querySelector('.hidAlignChart'),
+            hidAlignConfig
+        );
+
+        // REALITY CHECK GRAPH
+        const realData = {
+            labels: [
+                'My Health & Fitness',
+                'My Intellectual Life',
+                'My Emotional Life',
+                'My Character',
+                'My Spiritual Life',
+                'My Love Relationship',
+                'My Social Life',
+                'My Career',
+                'My Financial Life',
+                'Relationship W. Myself',
+                'Relationship W. Others',
+                'Excitement & Adventure'
+            ],
+            datasets: [{
+                label: 'Importance In Your Life',
+                data: [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1],
+                backgroundColor: [
+                    'rgba(116, 38, 44, 1)'
+                ],
+                borderColor: [
+                    '#74262C'
+                ],
+                borderWidth: 1
+
+            }, {
+                label: 'Where Your Time Goes',
+                data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+                backgroundColor: [
+                    'rgba(186, 80, 0, 0.8)'
+                ],
+                borderColor: [
+                    'rgb(199, 67, 0)'
+                ],
+                borderWidth: 1
+            }]
+        };
+        const realConfig = {
+            type: 'bar',
+            data: realData,
+            options: {
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        ticks: {
+                            maxRotation: 60,
+                            minRotation: 60,
+                            font: {
+                                size: 16
+                            },
+                            color: '#020018'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            font: {
+                                size: 14
+                            },
+                            color: '#020018'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            font: {
+                                size: 16
+                            },
+                            color: '#020018'
+                        }
+                    },
+                    customCanvasBackgroundColor: {
+                        color: 'white',
+                    }
+                },
+                onResize: (myChart, size) => {
+                    if (size.width < 550) {
+                        alignData.labels = [
+                            'Health & Fitness',
+                            'Intellectual Life',
+                            'Emotional Life',
+                            'Character',
+                            'Spiritual Life',
+                            'Love Rel.',
+                            'Social Life',
+                            'Career',
+                            'Financial Life',
+                            'Rel. W. Myself',
+                            'Rel. W. Others',
+                            'Excitment & Adventure'
+                        ];
+                    } else {
+                        alignData.labels = [
+                            'My Health & Fitness',
+                            'My Intellectual Life',
+                            'My Emotional Life',
+                            'My Character',
+                            'My Spiritual Life',
+                            'My Love Relationship',
+                            'My Social Life',
+                            'My Career',
+                            'My Financial Life',
+                            'Relationship W. Myself',
+                            'Relationship W. Others',
+                            'Excitement & Adventure'
+                        ];
+                    }
+                    if (myChart.width > 1000) {
+                        myChart.options.scales.x.ticks.font.size = 30;
+                        myChart.options.scales.y.ticks.font.size = 24;
+                        myChart.options.plugins.legend.labels.font.size = 30;
+                    } else if (myChart.width < 550) {
+                        myChart.options.scales.x.ticks.font.size = 12;
+                        myChart.options.scales.y.ticks.font.size = 12;
+                        myChart.options.plugins.legend.labels.font.size = 12;
+                    } else {
+                        myChart.options.scales.x.ticks.font.size = 16;
+                        myChart.options.scales.y.ticks.font.size = 14;
+                        myChart.options.plugins.legend.labels.font.size = 16;
+                    }
+                    myChart.update();
+                }
+            },
+            plugins: [plugin]
+        };
+        const realChart = new Chart(
+            document.getElementById('realChart'),
+            realConfig
+        );
+        //Setting up Real hidden Graph
+        const hidRealData = {
+            labels: [
+                'My Health & Fitness',
+                'My Intellectual Life',
+                'My Emotional Life',
+                'My Character',
+                'My Spiritual Life',
+                'My Love Relationship',
+                'My Social Life',
+                'My Career',
+                'My Financial Life',
+                'Relationship W. Myself',
+                'Relationship W. Others',
+                'Excitement & Adventure'
+            ],
+            datasets: [{
+                label: 'Importance In Your Life',
+                data: [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1],
+                backgroundColor: [
+                    'rgba(116, 38, 44, 1)'
+                ],
+                borderColor: [
+                    '#74262C'
+                ],
+                borderWidth: 1
+
+            }, {
+                label: 'Where Your Time Goes',
+                data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+                backgroundColor: [
+                    'rgba(186, 80, 0, 0.8)'
+                ],
+                borderColor: [
+                    'rgb(199, 67, 0)'
+                ],
+                borderWidth: 1
+            }]
+        };
+        const hidRealConfig = {
+            type: 'bar',
+            data: hidRealData,
+            options: {
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        ticks: {
+                            maxRotation: 60,
+                            minRotation: 60,
+                            font: {
+                                size: 30
+                            },
+                            color: '#020018'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            font: {
+                                size: 24
+                            },
+                            color: '#020018'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            font: {
+                                size: 30
+                            },
+                            color: '#020018'
+                        }
+                    },
+                    customCanvasBackgroundColor: {
+                        color: 'white',
+                    }
+                }
+            },
+            plugins: [plugin]
+        };
+        const hiddenRealChart = new Chart(
+            document.querySelector('.hidRealChart'),
+            hidRealConfig
+        );
+        setTimeout(() => {
+            document.querySelector('.hidden-real').style.display = 'none';
+            document.querySelector('.hidden-align').style.display = 'none';
+        }, 200)
+
+        window.onmessage = (event) => {
+            //storing data for multiple uses
+            userName = event.data[0]
+            alignResults = event.data[1];
+            alignAVG = event.data[2];
+            alignDates = event.data[3];
+            realityImpSessions = event.data[4];
+            realityTimeSessions = event.data[5];
+            workSessions = event.data[6];
+            dontWorkSessions = event.data[7];
+            //Populating date OPTIONS
+            const dateSelect = document.getElementById('nav-dates');
+            alignDates.forEach((e, i) => {
+                const option = document.createElement('option');
+                option.value = i;
+                option.innerText = e;
+                dateSelect.add(option);
+            })
+            document.getElementById('user-name').innerText = event.data[0];
+            document.getElementById('session-date').innerText = event.data[3][0];
+            alignData.datasets[0].data = event.data[1][0]
+            alignChart.update();
+            hidAlignData.datasets[0].data = event.data[1][0]
+            hiddenAlignChart.update();
+            document.querySelector('.happiness').innerText = event.data[2][0];
+            realData.datasets[0].data = event.data[4][0];
+            realData.datasets[1].data = event.data[5][0];
+            realChart.update();
+            hidRealData.datasets[0].data = event.data[4][0];
+            hidRealData.datasets[1].data = event.data[5][0];
+            hiddenRealChart.update();
+            const workList = document.querySelectorAll('#work-list li');
+            const dontWorkList = document.querySelectorAll('#dont-work-list li');
+            event.data[6][0].forEach((e, i) => {
+                workList[i].innerText = e;
+            })
+            event.data[7][0].forEach((e, i) => {
+                dontWorkList[i].innerText = e;
+            });
+            console.log('DATA Loaded');
+            //console.log(alignResults, alignAVG, alignDates, realityImpSessions, realityTimeSessions, workSessions, dontWorkSessions);
+
+        };
+        function updatePage(selObj) {
+            //on change function to update the page
+            let currentIndex = selObj.value;
+            document.getElementById('session-date').innerText = alignDates[currentIndex];
+            alignData.datasets[0].data = alignResults[currentIndex];
+            alignChart.update();
+            hidAlignData.datasets[0].data = alignResults[currentIndex];
+            hiddenAlignChart.update();
+            document.querySelector('.happiness').innerText = alignAVG[currentIndex];
+            realData.datasets[0].data = realityImpSessions[currentIndex];
+            realData.datasets[1].data = realityTimeSessions[currentIndex];
+            realChart.update();
+            hidRealData.datasets[0].data = realityImpSessions[currentIndex];
+            hidRealData.datasets[1].data = realityTimeSessions[currentIndex];
+            hiddenRealChart.update();
+            const workList = document.querySelectorAll('#work-list li');
+            const dontWorkList = document.querySelectorAll('#dont-work-list li');
+            workSessions[currentIndex].forEach((e, i) => {
+                workList[i].innerText = e;
+            });
+            dontWorkSessions[currentIndex].forEach((e, i) => {
+                dontWorkList[i].innerText = e;
+            });
+        };
+        window.onload = () => {
+            console.log('PAGE READY');
+            // making the divided DIVs on page 7 the same height
+            const dividedH1 = document.querySelector('.d1');
+            const dividedH2 = document.querySelector('.d2');
+            if (dividedH1.clientHeight > dividedH2.clientHeight) {
+                dividedH2.style.height = dividedH1.clientHeight + "px";
+            } else {
+                dividedH1.style.height = dividedH2.clientHeight + "px";
+            }
+            // Adding Download function to the BTN
+            dwnloadBTN.addEventListener('click', () => {
+                spinner.classList.toggle('active');
+                //Setting Images to original size to preserve quality
+                document.querySelector('.hidden-align').style.display = 'block';
+                document.querySelector('.hidden-real').style.display = 'block';
+                bgCtx.fillStyle = '#ffffff';
+                bgCtx.fillRect(0, 0, 1080, 1350);
+                bgCtx.drawImage(bgImg, 0, 0, 1080, 1350);
+
+                logoCtx.fillStyle = '#ffffff';
+                logoCtx.fillRect(0, 0, 500, 285);
+                logoCtx.drawImage(logoImg, 0, 0, 500, 285);
+                const communityBG = document.querySelector('.community-bg');
+                const bastianFullImg = document.querySelector('.bastian-full');
+                communityBG.classList.toggle('BG2');
+                window.open(URL.createObjectURL(printDocument()));
+                setTimeout(() => {
+                    communityBG.classList.toggle('BG2');
+                    document.querySelector('.hidden-align').style.display = 'none';
+                    document.querySelector('.hidden-real').style.display = 'none';
+                    spinner.classList.toggle('active');
+                }, 2000)
+            });
+        };
+    </script>
+</body>
+
+</html>
