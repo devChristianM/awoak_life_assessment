@@ -4,7 +4,7 @@ awoak life project repo
   This is the logic of a 3 parts project I developed for mr Bastian Gugger, a life and relationships coach who wanted to step up the functionalities of his website by implementing a series of tests to funnel Google ads visitors and introduce them to the type of services he offers.
 
   AWOAK TESTS
-    This is the first part of the project, it's composed of 3 tests where the user is asked to interact with various inputs to gather data to be used in the "alignment assessment"
+    - This is the first part of the project, it's composed of 3 tests where the user is asked to interact with various inputs to gather data to be used in the "alignment assessment"
     
   - test1: the user is asked to evaluate from 1 to 10 various aspects of his life such as job, relationships, free time and such through a series of sliders.
     
