@@ -21,6 +21,3 @@
     - This is the third part of the project, it is a full report of the data gathered in the tests displayed in a page that can be converted and downladed as a PDF document.
     
   The data from the selected test is passed to the report page and used to render the graphs, the user can also change the set of data displayed on the graphs directly from a dropdown on the same page.
-  This part of the project uses HTML, CSS, Javascript, the Velo API provided by Wix, the Chart.js library and the jsPDF library for creating a PDF using data from the report page.
-
-  This project was implemented on a website made with Wix so I don't really have the HTML and styling for the first two parts of the project as they were done directly with their editor.
